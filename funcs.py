@@ -1,24 +1,8 @@
-import pygame, colors, random, pieces, variables
+import pygame, colors,  variables
+from decorator import BasicPiece, ColorChangerDecorator
 
-sum_score = 0
 y_to_insert = 0
 x_to_insert = 5
-
-
-def get_piece():
-    """
-    Randomly selects and returns a Tetris piece with its current shape, name, and shape number.
-
-    Returns:
-        list: A list containing the current piece's side, name, and shape number.
-    """
-    list_of_pieces = [pieces.piece_I, pieces.piece_T, pieces.piece_O, pieces.piece_J, pieces.piece_L, pieces.piece_S, pieces.piece_Z]
-    piece_name = list_of_pieces[random.randrange(len(list_of_pieces))]
-    shape = random.randint(0, 3)
-    current_piece_name = piece_name
-    current_piece_shape_number = shape
-    return [piece_name.sides[shape], current_piece_name, current_piece_shape_number]
-
 
 def insert_piece(piece, game_matrix):
     """
@@ -104,25 +88,28 @@ def line_isfull_check(game_matrix):
 
 def display_update(gameDisplay, width, game_matrix, square_size, x_to_center):
     """
-    Updates the game display based on the current state of the game matrix.
+        Displays any update on the screen with their position
+        """
+    basic_piece = BasicPiece()
 
-    Args:
-        gameDisplay (pygame.Surface): The main display surface.
-        width (int): The width of the game display.
-        game_matrix (list): A 2D list representing the game matrix.
-        square_size (int): The size of each square in the game matrix.
-        x_to_center (int): The distance from the left edge of the game display to center the game matrix.
-    """
     for row_index in range(len(game_matrix)):
         for col_index in range(1, len(game_matrix[0]) - 1):
+            rect = [(col_index - 1) * square_size + (x_to_center), (row_index * square_size) - 100, square_size, square_size]
+
             if game_matrix[row_index][col_index] == 0:
-                pygame.draw.rect(gameDisplay, colors.WHITE, [(col_index - 1) * square_size + (x_to_center), (row_index * square_size) - 100, square_size, square_size])
+                color_changer = ColorChangerDecorator(basic_piece, colors.white)
+                color_changer.draw(gameDisplay, colors.WHITE, rect)
+           
+
             if game_matrix[row_index][col_index] == 1:
-                pygame.draw.rect(gameDisplay, colors.ORANGE, [(col_index - 1) * square_size + (x_to_center), (row_index * square_size) - 100, square_size, square_size])
-                pygame.draw.rect(gameDisplay, colors.DARKER_ORANGE, [(col_index - 1) * square_size + (x_to_center), (row_index * square_size) - 100, square_size, square_size], 1)
+                color_changer = ColorChangerDecorator(basic_piece, colors.orange)
+                color_changer.draw(gameDisplay, colors.green, rect)
+               
             if game_matrix[row_index][col_index] == 2:
-                pygame.draw.rect(gameDisplay, colors.DARK_BLUE, [(col_index - 1) * square_size + (x_to_center), (row_index * square_size) - 100, square_size, square_size])
-                pygame.draw.rect(gameDisplay, colors.DARKER_BLUE, [(col_index - 1) * square_size + (x_to_center), (row_index * square_size) - 100, square_size, square_size], 1)
+                color_changer = ColorChangerDecorator(basic_piece, colors.DARK_BLUE)
+                color_changer.draw(gameDisplay, colors.DARK_BLUE, rect)
+             
+
 
 def delete_line(game_matrix):
     """
@@ -258,7 +245,7 @@ def update_score(gameDisplay, score, x_to_center):
         score (int): The current score.
         x_to_center (int): The x-coordinate to center the score display.
     """
-    pygame.draw.rect(gameDisplay, colors.red, [0,0, x_to_center-1, 100])
+    pygame.draw.rect(gameDisplay, colors.GRAY, [0,0, x_to_center-1, 100])
     text = variables.font.render("Score: " + str(score), True, colors.BLACK)
     gameDisplay.blit(text, [0,0])
 
@@ -285,3 +272,5 @@ def unpause():
 
     global  pause
     pause = False
+
+sum_score = 0

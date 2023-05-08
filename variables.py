@@ -1,4 +1,6 @@
 import pygame, random, funcs, colors, pieces
+from observer import GameState,ScoreObserver
+
 
 # Initialize the clock object to control the game speed
 clock = pygame.time.Clock()
@@ -23,7 +25,7 @@ gameDisplay = pygame.display.set_mode((width,height))
 pygame.display.set_caption("Tetris")
 
 # Fill the game window with the color red
-gameDisplay.fill(colors.red)
+gameDisplay.fill(colors.GRAY)
 
 # Draw the border of the game area on the screen
 pygame.draw.rect(gameDisplay, colors.BLACK, [x_to_center-1,0,(square_size*10)+2,(square_size*20)+1], 1)
@@ -36,7 +38,7 @@ current_piece = False
 
 
 # Set the delay time (in milliseconds) to control the falling speed of the pieces
-delay = 200
+delay = 100
 
 #Font for the Game
 font = pygame.font.SysFont("arial", 30)
@@ -68,9 +70,7 @@ game_matrix = [
   [7,0,0,0,0,0,0,0,0,0,0,7],
   [7,0,0,0,0,0,0,0,0,0,0,7],
   [7,0,0,0,0,0,0,0,0,0,0,7],
-  [7,0,0,0,0,2,0,0,0,0,0,7],
-  [7,0,2,2,2,2,2,2,2,2,2,7],
-  [7,0,2,2,2,2,2,2,2,2,2,7],
+  [7,0,0,0,0,0,0,0,0,0,0,7],
   [7,7,7,7,7,7,7,7,7,7,7,7]
 ]
 
